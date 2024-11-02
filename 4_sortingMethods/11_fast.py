@@ -1,5 +1,5 @@
-import random
-import timeit
+from random import randint
+from timeit import timeit
 
 
 def partition(arr, low, high):
@@ -31,7 +31,7 @@ def quick_sort(arr):
     _quick_sort(arr, 0, len(arr) - 1)
 
 
-array = [random.randint(0, 100000000) for _ in range(1000000)]
+array = [randint(0, 100000000) for _ in range(1000000)]
 
 
 def test_large_quick_sort():
@@ -39,8 +39,8 @@ def test_large_quick_sort():
     quick_sort(large_array)
 
 
-execution_time = timeit.timeit(test_large_quick_sort, number=1)
-print(f"Среднее время выполнения на массиве из 1,000,000 элементов: {execution_time / 1:.6f} секунд")
+execution_time = timeit(test_large_quick_sort, number=3)
+print(f"Среднее время выполнения на массиве из 1,000,000 элементов: {execution_time / 3:.6f} секунд")
 
 array = [10, 1, 3, 6, -5, 99, 0, 13, 12]
 quick_sort(array)
