@@ -1,63 +1,43 @@
 from tree_parser import RecursiveParser
 
 
-class NonRecursiveParser(RecursiveParser):
-    def parse(self, idx=0):
-        stack = []
-        current_node = None
-        root = None
+def iterative_preorder(root):
+    if root is None:
+        return []
 
-        while idx < len(self.tree):
-            char = self.tree[idx]
+    stack = [root]
+    result = []
+    while stack:
+        node = stack.pop()
+        result.append(node.value)
 
-            if char.isdigit():
-                value, idx = self.full_number_parse(idx)
-                new_node = self.node_factory(value)
+        if node.right:
+            stack.append(node.right)
+        if node.left:
+            stack.append(node.left)
+        check_stack = []
+        for i in stack:
+            check_stack.append(i.value)
+        print(check_stack)
 
-                if not root:
-                    root = new_node
-
-                if current_node:
-                    if not current_node.left:
-                        current_node.left = new_node
-                    elif not current_node.right:
-                        current_node.right = new_node
-
-                stack.append(new_node)
-                current_node = new_node
-
-            elif char == '(':
-                idx += 1
-            elif char == ',':
-                idx += 1
-                if stack:
-                    current_node = stack[-1]
-            elif char == ')':
-                idx += 1
-                if stack:
-                    current_node = stack.pop()
-            else:
-                idx += 1
-        return root, idx
+    return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tree_string = "8(3(1,6(4,7)),10(,14(13,)))"
 
-    # Используем рекурсивный парсер
-    parser = NonRecursiveParser(tree_string)
-    root = parser.root
+    parser = RecursiveParser(tree_string)
 
-    def preorder(node):
-        """
-        Прямой обход: узел -> левое поддерево -> правое поддерево.
-        :param node: Текущий узел
-        """
+    root = parser.parse_tree()
 
-        if node:
-            print(node.value, end=" ")
-            preorder(node.left)
-            preorder(node.right)
+    """
+            8
+           ↙ ↘
+          3   10
+         ↙ ↘    ↘
+        1   6    14
+           ↙ ↘   ↙
+          4   7 13
+    """
 
-    print("Прямой обход")
-    preorder(root)
+    print("Нерекурсивный прямой обход:", iterative_preorder(root))
