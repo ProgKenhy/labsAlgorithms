@@ -139,8 +139,12 @@ def menu(root):
         elif choice == "3":
             try:
                 value = int(input("Введите значение для удаления: "))
-                root = delete_node(root, value)
-                print("Элемент удален.")
+                node, parent = search_node(root, value)
+                if node:
+                    root = delete_node(root, value)
+                    print("Элемент удалён.")
+                else:
+                    print("Элемент не найден.")
             except ValueError:
                 print("Ошибка: введите корректное число.")
 
